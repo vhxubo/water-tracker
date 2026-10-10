@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Space Grotesk Variable";
+  src: url("./assets/fonts/space-grotesk.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Noto Sans SC",
+    "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  --font-num: "Space Grotesk Variable", "Space Grotesk", "PingFang SC", sans-serif;
+
+  /* 浅色 · 晨雾水面 */
+  --color-mist: #ecf3f4;
+  --color-ink: #10333c;
+  --color-ink-dim: #5e7c86;
+  --color-line: #d6e3e6;
+  --color-aqua: #0e87a8;
+  --color-aqua-deep: #0b6b86;
+  --color-aqua-soft: #dcf0f4;
+
+  /* 深色 · 夜里深水 */
+  --color-abyss: #081114;
+  --color-deep: #0f1e24;
+  --color-deep2: #15272f;
+  --color-foam: #dbeaed;
+  --color-foam-dim: #7e9ca6;
+  --color-line-dark: #1f353d;
+  --color-cyan: #56c6dd;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-mist text-ink dark:bg-abyss dark:text-foam font-sans antialiased;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-aqua dark:outline-cyan;
+  }
+  input,
+  select {
+    font: inherit;
+  }
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    opacity: 0.55;
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl bg-white border border-line dark:bg-deep dark:border-line-dark;
+  }
+  .muted {
+    @apply text-ink-dim dark:text-foam-dim;
+  }
+  .num {
+    font-family: var(--font-num);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-line bg-white px-3 py-1.5 text-sm text-ink transition-all select-none cursor-pointer dark:border-line-dark dark:bg-deep2 dark:text-foam;
+  }
+  .chip:active {
+    transform: scale(0.95);
+  }
+  .chip-on {
+    @apply border-aqua bg-aqua text-white dark:border-cyan dark:bg-cyan dark:text-abyss;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-1 rounded-xl transition-all select-none cursor-pointer disabled:opacity-40 disabled:pointer-events-none;
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .field {
+    @apply w-full rounded-xl border border-line bg-white px-3 py-2.5 text-ink placeholder:text-ink-dim/60 dark:border-line-dark dark:bg-deep2 dark:text-foam dark:placeholder:text-foam-dim/60;
+  }
+}
+
+/* 刻度尺 —— 签名元素：水位计刻度 */
+.ticks {
+  height: 6px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #9fbcc3 0 1px,
+    transparent 1px 12px
+  );
+  opacity: 0.55;
+}
+.dark .ticks {
+  background-image: repeating-linear-gradient(
+    90deg,
+    #2e4c55 0 1px,
+    transparent 1px 12px
+  );
+}
+
+/* 瓶数变化时的水波脉冲 */
+@keyframes pulse-num {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.22);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.pulse-num {
+  animation: pulse-num 0.35s ease;
+}
+
+/* 底部弹层进出 */
+.sheet-enter-active {
+  transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.sheet-leave-active {
+  transition: transform 0.2s ease-in;
+}
+.sheet-enter-from,
+.sheet-leave-to {
+  transform: translateY(100%);
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
